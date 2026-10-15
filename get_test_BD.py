@@ -59,12 +59,12 @@ titles = [
     "Арифметическая прогрессия",
     "Геометрическая прогрессия"
 ]
-
+titles = ["Алгебраическое уравнение"]
 if not os.path.exists("data"):
     os.makedirs("data")
 def refactor(text, title):
     global cnt
-    if text.text.strip() and text.title.strip() not in "ПримечанияЛитератураСсылки":
+    if text.text.strip() and text.title.strip() not in "ПримечанияЛитератураСсылкиСм. также":
         
         final_text[title + " " + str(cnt)] = text.title.strip() + clear(text.text) 
         cnt+=1
@@ -83,17 +83,19 @@ def clear(text):
         f2 = len(i.strip())
         f3 = r"{\displaystyle " in i.strip() 
         if len(i.strip()) != 0:
+            print(cleaned_lines[-10:], i)
             if f1 and (f2 > 100 or any(s in last.strip() for s in words_for_formuls)) and not(f3):
                
                cleaned_lines+= " " + i.strip()
             elif f1 or f3:
                 
                 line = i.strip()
+                print(line)
                 f4 = sum([len(d.group()) for d in finditer(r"{\\[a-z]+|\\[a-z]+|}",line)])
                 if f3 and len(line) - f4 > 10:
                     
                     line = line.replace(r"{\displaystyle ", "")
-                    line = line.replace(" ", "")
+                    #line = line.replace(" ", "")
                    
                     
                     
@@ -104,7 +106,7 @@ def clear(text):
                     
                     line = line.replace(r"{\displaystyle ", "")
                    
-                    line = line.replace(" ", "")
+                    #line = line.replace(" ", "")
                     
                    
                     line = " $" + line[:-1] + "$"
